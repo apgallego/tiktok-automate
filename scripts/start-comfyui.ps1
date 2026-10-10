@@ -6,4 +6,5 @@ if (-not (Test-Path -LiteralPath $launchFile -PathType Leaf)) {
     throw "No encuentro run_nvidia_gpu.bat en COMFYUI_DIR: $($env:COMFYUI_DIR)"
 }
 
+Set-Location -LiteralPath $env:COMFYUI_DIR
 & $launchFile
