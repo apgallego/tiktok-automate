@@ -1,0 +1,14 @@
+"Create a hyper-realistic, vertical video (9:16 aspect ratio) depicting a serene forest at dawn.  Heavy morning mist hangs in the air, partially
+obscuring ancient trees with rich, moss-covered bark. The light is soft and diffused, predominantly pastel shades of pink, lavender, and pale gold
+filtering through the fog.  Focus on atmospheric perspective - distant trees are blurred and less defined. The overall mood should be profoundly
+peaceful and tranquil.  No visible wildlife, no people, no text, no logos. Emphasize natural textures and a sense of vastness and quiet
+contemplation.  Use subtle motion blur to simulate the movement of the mist."
+
+**Tips for getting the best results:**
+
+*   **Aspect Ratio:**  Specify "9:16" or "vertical" clearly.
+*   **Keywords:**  "Hyper-realistic," "atmospheric," "serene," "tranquil" will help guide the AI.
+*   **Colors:**  "Pastel shades of pink, lavender, and pale gold" will get you the desired color palette.
+*   **Emphasis:**  "Focus on atmospheric perspective" is key for the mist effect.
+*   **Negative Prompts:**  (If your AI allows) Add negative prompts like “people,” “text,” “logos,” “animals,” “bright colors” to actively
+discourage those elements.

@@ -1,0 +1,185 @@
+[
+    {
+        "name":  "Crear vídeo vertical con canción desde ComfyUI",
+        "active":  false,
+        "nodes":  [
+                      {
+                          "parameters":  {
+
+                                         },
+                          "type":  "n8n-nodes-base.manualTrigger",
+                          "typeVersion":  1,
+                          "position":  [
+                                           0,
+                                           0
+                                       ],
+                          "id":  "e6da20c9-d394-4814-9f78-93de0c72d319",
+                          "name":  "When clicking ‘Execute workflow’"
+                      },
+                      {
+                          "parameters":  {
+                                             "method":  "POST",
+                                             "url":  "http://127.0.0.1:11434/api/chat",
+                                             "sendBody":  true,
+                                             "specifyBody":  "json",
+                                             "jsonBody":  "{\n  \"model\": \"gemma3:4b\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Crea una idea original para un vídeo ambiental de paisaje. Devuelve únicamente un objeto JSON con estas claves: scene (lugar y momento del día, en español), video_prompt (prompt visual detallado en inglés para un plano vertical 9:16, movimiento de cámara suave, sin personas, texto ni logotipos), caption (descripción breve en español) y hashtags (lista de 4 hashtags en español).\"\n    }\n  ],\n  \"stream\": false,\n  \"format\": \"json\"\n}",
+                                             "options":  {
+
+                                                         }
+                                         },
+                          "type":  "n8n-nodes-base.httpRequest",
+                          "typeVersion":  4.5,
+                          "position":  [
+                                           160,
+                                           0
+                                       ],
+                          "id":  "35fad842-0a6e-47f5-8bf0-6e20ec84772e",
+                          "name":  "HTTP Request"
+                      },
+                      {
+                          "parameters":  {
+                                             "command":  "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"\u0026 (Join-Path $env:PROJECT_DIR \u0027scripts\\crear-video.ps1\u0027)\""
+                                         },
+                          "id":  "fc909008-1184-459d-88fb-305d29a03c88",
+                          "name":  "Crear MP4 vertical con Dorian_concept",
+                          "type":  "n8n-nodes-base.executeCommand",
+                          "typeVersion":  1,
+                          "position":  [
+                                           320,
+                                           0
+                                       ]
+                      },
+                      {
+                          "parameters":  {
+                                             "method":  "POST",
+                                             "url":  "https://api.buffer.com",
+                                             "authentication":  "genericCredentialType",
+                                             "genericAuthType":  "httpHeaderAuth",
+                                             "sendBody":  true,
+                                             "specifyBody":  "json",
+                                             "jsonBody":  "={\n  \"query\": \"mutation CreatePost { createPost(input: { text: \\\"Un momento para respirar 🌿 #naturaleza #paisajes\\\", channelId: \"TU_TIKTOK_CHANNEL_ID\", schedulingType: automatic, mode: addToQueue, assets: [{ video: { url: \\\"{{ $json.secure_url }}\\\", metadata: { thumbnailOffset: 2000 } } }] }) { ... on PostActionSuccess { post { id text dueAt } } ... on MutationError { message } } }\"\n}",
+                                             "options":  {
+
+                                                         }
+                                         },
+                          "type":  "n8n-nodes-base.httpRequest",
+                          "typeVersion":  4.5,
+                          "position":  [
+                                           800,
+                                           0
+                                       ],
+                          "id":  "3880194a-b6b4-401e-9e67-94684e35aafe",
+                          "name":  "HTTP Request1"
+                      },
+                      {
+                          "parameters":  {
+                                             "fileSelector":  "={{ $json.stdout.split(\u0027VIDEO_CREADO=\u0027)[1].trim() }}",
+                                             "options":  {
+
+                                                         }
+                                         },
+                          "type":  "n8n-nodes-base.readWriteFile",
+                          "typeVersion":  1.1,
+                          "position":  [
+                                           480,
+                                           0
+                                       ],
+                          "id":  "b5c66751-d5c8-4359-87a2-2101b5a1e49e",
+                          "name":  "Read/Write Files from Disk"
+                      },
+                      {
+                          "parameters":  {
+                                             "method":  "POST",
+                                             "url":  "https://api.cloudinary.com/v1_1/TU_CLOUD_NAME/video/upload",
+                                             "sendBody":  true,
+                                             "contentType":  "multipart-form-data",
+                                             "bodyParameters":  {
+                                                                    "parameters":  [
+                                                                                       {
+                                                                                           "parameterType":  "formBinaryData",
+                                                                                           "name":  "file",
+                                                                                           "inputDataFieldName":  "data"
+                                                                                       },
+                                                                                       {
+                                                                                           "name":  "upload_preset",
+                                                                                           "value":  "TU_UPLOAD_PRESET_UNSIGNED"
+                                                                                       }
+                                                                                   ]
+                                                                },
+                                             "options":  {
+
+                                                         }
+                                         },
+                          "type":  "n8n-nodes-base.httpRequest",
+                          "typeVersion":  4.5,
+                          "position":  [
+                                           640,
+                                           0
+                                       ],
+                          "id":  "06cc10ab-daa5-493d-b09a-978baac00221",
+                          "name":  "HTTP Request2"
+                      }
+                  ],
+        "connections":  {
+                            "When clicking ‘Execute workflow’":  {
+                                                                     "main":  [
+                                                                                  [
+                                                                                      {
+                                                                                          "node":  "HTTP Request",
+                                                                                          "type":  "main",
+                                                                                          "index":  0
+                                                                                      }
+                                                                                  ]
+                                                                              ]
+                                                                 },
+                            "HTTP Request":  {
+                                                 "main":  [
+                                                              [
+                                                                  {
+                                                                      "node":  "Crear MP4 vertical con Dorian_concept",
+                                                                      "type":  "main",
+                                                                      "index":  0
+                                                                  }
+                                                              ]
+                                                          ]
+                                             },
+                            "Crear MP4 vertical con Dorian_concept":  {
+                                                                          "main":  [
+                                                                                       [
+                                                                                           {
+                                                                                               "node":  "Read/Write Files from Disk",
+                                                                                               "type":  "main",
+                                                                                               "index":  0
+                                                                                           }
+                                                                                       ]
+                                                                                   ]
+                                                                      },
+                            "Read/Write Files from Disk":  {
+                                                               "main":  [
+                                                                            [
+                                                                                {
+                                                                                    "node":  "HTTP Request2",
+                                                                                    "type":  "main",
+                                                                                    "index":  0
+                                                                                }
+                                                                            ]
+                                                                        ]
+                                                           },
+                            "HTTP Request2":  {
+                                                  "main":  [
+                                                               [
+                                                                   {
+                                                                       "node":  "HTTP Request1",
+                                                                       "type":  "main",
+                                                                       "index":  0
+                                                                   }
+                                                               ]
+                                                           ]
+                                              }
+                        },
+        "settings":  {
+                         "executionOrder":  "v1",
+                         "binaryMode":  "separate"
+                     }
+    }
+]

@@ -1,0 +1,27 @@
+# Local settings, API keys, and passwords
+.env
+.env.*
+!.env.example
+pass*
+
+# Generated media and local-only audio
+/videos/*
+!/videos/.gitkeep
+/assets/audio/*
+!/assets/audio/.gitkeep
+/workflows/n8n-export-local.json
+*.mp3
+*.mp4
+
+# Logs, local databases, and runtime state
+*.log
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+.n8n/
+node_modules/
+
+# Common editor and operating-system files
+.DS_Store
+Thumbs.db
+.vscode/
