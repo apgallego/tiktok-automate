@@ -28,7 +28,7 @@ Guía para iniciar el proyecto en Windows 10 desde la carpeta del repositorio.
 
 ## Publicar un vídeo
 
-En n8n, abre el workflow y pulsa **Execute workflow**. El flujo consulta Ollama para crear la idea/caption, convierte el PNG más reciente de ComfyUI a un MP4 vertical de 15 segundos con audio, lo sube a Cloudinary y añade un post real a la cola de TikTok en Buffer. Confirma en Buffer que el post quedó en cola antes de volver a ejecutar.
+En n8n, abre el workflow y pulsa **Execute workflow**. Ollama propone una escena Dark Fantasy y un prompt visual; ComfyUI genera una imagen nueva con ese prompt y el script la convierte en un MP4 vertical de 8 segundos con audio, zoom y paneo. El paisaje debe dominar la imagen (aproximadamente el 85–90 % del encuadre), con un caballero o hechicero pequeño y distante, o un artefacto discreto integrado en el entorno. El vídeo se sube a Cloudinary y Buffer lo añade a la cola de TikTok con el pie de foto fijo `#darkfantasy #fantasiaoscura #misterio #mistery #fyp`. Confirma en Buffer que el post quedó en cola antes de volver a ejecutar.
 
 Las rutas configurables están en `.env`: `COMFYUI_DIR`, `COMFYUI_OUTPUT_DIR`, `VIDEO_OUTPUT_DIR`, `AUDIO_FILE` y `FFMPEG_EXE`. Las rutas relativas se resuelven desde la raíz del proyecto. Los MP4 locales quedan en `videos/`; tanto esa carpeta como el audio están excluidos de Git.
 

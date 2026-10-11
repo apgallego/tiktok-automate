@@ -1,0 +1,107 @@
+{
+    "72":  {
+               "inputs":  {
+                              "ckpt_name":  "v1-5-pruned-emaonly-fp16.safetensors"
+                          },
+               "class_type":  "CheckpointLoaderSimple",
+               "_meta":  {
+                             "title":  "Load Checkpoint"
+                         }
+           },
+    "73":  {
+               "inputs":  {
+                              "text":  "dark fantasy landscape, a half-submerged ancient gothic abbey rising from a still\nmarsh, pale green eclipse behind distant mountains, tiny candle lights in broken\nwindows, drifting ground fog, subtle ripples in the foreground water, layered\ncomposition with clear foreground middle ground and distant background, cinematic\nmoody lighting, intricate stone architecture, atmospheric perspective, highly\ndetailed environment, portrait composition, no frame",
+                              "clip":  [
+                                           "72",
+                                           1
+                                       ]
+                          },
+               "class_type":  "CLIPTextEncode",
+               "_meta":  {
+                             "title":  "CLIP Text Encode (Prompt)"
+                         }
+           },
+    "74":  {
+               "inputs":  {
+                              "text":  "animal, creature, monster, text, letters, logo, watermark, frame, border, low quality, blurry, out of focus, oversaturated, cartoon, anime, illustration, duplicate objects, duplicate people, crowd, malformed architecture, deformed, bad anatomy, extra limbs, extra fingers, malformed hands, close-up face, close-up portrait, bright cheerful lighting, modern clothing, modern buildings",
+                              "clip":  [
+                                           "72",
+                                           1
+                                       ]
+                          },
+               "class_type":  "CLIPTextEncode",
+               "_meta":  {
+                             "title":  "CLIP Text Encode (Prompt)"
+                         }
+           },
+    "75":  {
+               "inputs":  {
+                              "width":  512,
+                              "height":  768,
+                              "batch_size":  1
+                          },
+               "class_type":  "EmptyLatentImage",
+               "_meta":  {
+                             "title":  "Empty Latent Image"
+                         }
+           },
+    "76":  {
+               "inputs":  {
+                              "seed":  1042854145433611,
+                              "steps":  20,
+                              "cfg":  8,
+                              "sampler_name":  "euler",
+                              "scheduler":  "simple",
+                              "denoise":  1,
+                              "model":  [
+                                            "72",
+                                            0
+                                        ],
+                              "positive":  [
+                                               "73",
+                                               0
+                                           ],
+                              "negative":  [
+                                               "74",
+                                               0
+                                           ],
+                              "latent_image":  [
+                                                   "75",
+                                                   0
+                                               ]
+                          },
+               "class_type":  "KSampler",
+               "_meta":  {
+                             "title":  "KSampler"
+                         }
+           },
+    "77":  {
+               "inputs":  {
+                              "samples":  [
+                                              "76",
+                                              0
+                                          ],
+                              "vae":  [
+                                          "72",
+                                          2
+                                      ]
+                          },
+               "class_type":  "VAEDecode",
+               "_meta":  {
+                             "title":  "VAE Decode"
+                         }
+           },
+    "78":  {
+               "inputs":  {
+                              "filename_prefix":  "ComfyUI",
+                              "images":  [
+                                             "77",
+                                             0
+                                         ]
+                          },
+               "class_type":  "SaveImage",
+               "_meta":  {
+                             "title":  "Save Image"
+                         }
+           }
+}

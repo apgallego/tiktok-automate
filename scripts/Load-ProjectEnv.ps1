@@ -40,6 +40,7 @@ function Resolve-ProjectPath {
 }
 
 $env:PROJECT_DIR = $script:ProjectRoot
+$env:COMFYUI_URL = if ([string]::IsNullOrWhiteSpace($env:COMFYUI_URL)) { 'http://127.0.0.1:8188' } else { $env:COMFYUI_URL.TrimEnd('/') }
 $env:COMFYUI_DIR = Resolve-ProjectPath -Value $env:COMFYUI_DIR -DefaultValue '..\__RESOURCES\ComfyUI_windows_portable'
 $defaultComfyOutput = Join-Path $env:COMFYUI_DIR 'ComfyUI\output'
 $env:COMFYUI_OUTPUT_DIR = Resolve-ProjectPath -Value $env:COMFYUI_OUTPUT_DIR -DefaultValue $defaultComfyOutput

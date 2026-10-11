@@ -42,6 +42,22 @@ if (-not (Test-Path -LiteralPath $InputImage -PathType Leaf)) {
     throw "No existe la imagen: $InputImage"
 }
 
+$image = Get-Item -LiteralPath $InputImage
+$imageSignature = [ordered]@{
+    path = $image.FullName
+    lastWriteTimeUtcTicks = $image.LastWriteTimeUtc.Ticks
+    length = $image.Length
+}
+$imageMarker = Join-Path $videoOutput ".last-image-used.json"
+if (-not $PSBoundParameters.ContainsKey('InputImage') -and (Test-Path -LiteralPath $imageMarker -PathType Leaf)) {
+    $previousImage = Get-Content -LiteralPath $imageMarker -Raw | ConvertFrom-Json
+    if ($previousImage.path -eq $imageSignature.path -and
+        [long]$previousImage.lastWriteTimeUtcTicks -eq $imageSignature.lastWriteTimeUtcTicks -and
+        [long]$previousImage.length -eq $imageSignature.length) {
+        throw "El PNG más reciente ya se usó para crear un vídeo: $($image.FullName). En ComfyUI cambia el prompt positivo, pulsa Queue Prompt y espera a que termine una generación nueva antes de ejecutar este nodo."
+    }
+}
+
 if (-not (Test-Path -LiteralPath $AudioFile -PathType Leaf)) {
     throw "No existe la pista de audio: $AudioFile"
 }
@@ -50,11 +66,12 @@ New-Item -ItemType Directory -Path $videoOutput -Force | Out-Null
 $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $outputFile = Join-Path $videoOutput "paisaje-$timestamp.mp4"
 
-$filter = "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,zoompan=z='min(zoom+0.00025,1.10)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=450:s=1080x1920:fps=30,format=yuv420p"
+$filter = "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,zoompan=z='min(1+0.0015*on,1.36)':x='(iw-iw/zoom)*(0.20+0.50*on/239+0.08*sin(2*PI*on/239))':y='(ih-ih/zoom)*(0.18+0.44*on/239+0.05*sin(2*PI*on/239+PI/2))':d=240:s=1080x1920:fps=30,fade=t=out:st=7:d=1,format=yuv420p"
 
-& $ffmpeg -y -loop 1 -framerate 30 -i $InputImage -i $AudioFile -vf $filter -map 0:v:0 -map 1:a:0 -frames:v 450 -t 15 -c:v libx264 -preset veryfast -crf 24 -c:a aac -b:a 192k -af "afade=t=out:st=14:d=1" -movflags +faststart $outputFile
+& $ffmpeg -y -loop 1 -framerate 30 -i $InputImage -i $AudioFile -vf $filter -map 0:v:0 -map 1:a:0 -frames:v 240 -t 8 -c:v libx264 -preset veryfast -crf 24 -c:a aac -b:a 192k -af "afade=t=out:st=7:d=1" -movflags +faststart $outputFile
 if ($LASTEXITCODE -ne 0) {
     throw "FFmpeg terminó con código $LASTEXITCODE"
 }
 
+$imageSignature | ConvertTo-Json | Set-Content -LiteralPath $imageMarker -Encoding UTF8
 Write-Output "VIDEO_CREADO=$outputFile"

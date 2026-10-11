@@ -10,9 +10,14 @@ Consulta [ARRANQUE_LOCAL.md](ARRANQUE_LOCAL.md) para los pasos rápidos y [GUIA_
 2. Pon tu archivo de audio local en `assets/audio/` y configura `AUDIO_FILE`.
 3. Inicia ComfyUI con `scripts/start-comfyui.ps1` y Ollama como aplicación local.
 4. Inicia n8n con `scripts/start-n8n.ps1`.
-5. Importa `workflows/n8n-video-tiktok.json` y rellena sus marcadores de Cloudinary y Buffer. Guarda la clave de Buffer en **Credentials** de n8n.
+5. Comprueba que ComfyUI está activo en `COMFYUI_URL`; n8n le envía automáticamente el prompt generado por Ollama usando `workflows/workdlow-dfantasy.json`.
+6. Importa `workflows/n8n-video-tiktok.json` y rellena sus marcadores de Cloudinary y Buffer. Guarda la clave de Buffer en **Credentials** de n8n.
 
-La ejecución del workflow publica una entrada real en la cola de Buffer. Comprueba la cola y los valores de integración antes de ejecutarlo.
+Cada ejecución genera una imagen nueva en ComfyUI y publica una entrada real en la cola de Buffer. Comprueba la cola y los valores de integración antes de ejecutarlo.
+
+El estilo automático es Dark Fantasy: el paisaje es el foco y debe ocupar aproximadamente el 85–90 % del encuadre. Ollama añade un solo detalle narrativo discreto —un caballero o hechicero pequeño a media o larga distancia, o un artefacto integrado en el lugar— y pide evitar primeros planos. Buffer usa el pie de foto fijo `#darkfantasy #fantasiaoscura #misterio #mistery #fyp`.
+
+El render local parte de una sola imagen y crea un MP4 de 8 segundos con FFmpeg, un zoom de hasta el 36 %, paneo diagonal con deriva suave y fade out visual y de audio en el último segundo. No genera movimiento independiente de las nubes o el agua, así evita usar un modelo de generación de vídeo.
 
 ## Contenido local ignorado por Git
 

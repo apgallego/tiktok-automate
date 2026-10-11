@@ -1,14 +1,45 @@
-"Create a hyper-realistic, vertical video (9:16 aspect ratio) depicting a serene forest at dawn.  Heavy morning mist hangs in the air, partially
-obscuring ancient trees with rich, moss-covered bark. The light is soft and diffused, predominantly pastel shades of pink, lavender, and pale gold
-filtering through the fog.  Focus on atmospheric perspective - distant trees are blurred and less defined. The overall mood should be profoundly
-peaceful and tranquil.  No visible wildlife, no people, no text, no logos. Emphasize natural textures and a sense of vastness and quiet
-contemplation.  Use subtle motion blur to simulate the movement of the mist."
+PROMPTS DARK FANTASY PARA COMFYUI (SD 1.5)
 
-**Tips for getting the best results:**
+Este archivo es una biblioteca para copiar y pegar. ComfyUI no lo lee automáticamente.
 
-*   **Aspect Ratio:**  Specify "9:16" or "vertical" clearly.
-*   **Keywords:**  "Hyper-realistic," "atmospheric," "serene," "tranquil" will help guide the AI.
-*   **Colors:**  "Pastel shades of pink, lavender, and pale gold" will get you the desired color palette.
-*   **Emphasis:**  "Focus on atmospheric perspective" is key for the mist effect.
-*   **Negative Prompts:**  (If your AI allows) Add negative prompts like “people,” “text,” “logos,” “animals,” “bright colors” to actively
-discourage those elements.
+En ComfyUI, reemplaza TODO el texto del CLIP Text Encode positivo por UNA sola escena
+de las siguientes. Deja el nodo negativo con el prompt negativo compartido al final.
+Pulsa Queue Prompt y espera a que aparezca un PNG nuevo en ComfyUI/output antes de
+ejecutar el workflow de n8n.
+
+ESCENA 1 — ABADÍA SUMERGIDA
+dark fantasy landscape, a half-submerged ancient gothic abbey rising from a still
+marsh, pale green eclipse behind distant mountains, tiny candle lights in broken
+windows, drifting ground fog, subtle ripples in the foreground water, layered
+composition with clear foreground middle ground and distant background, cinematic
+moody lighting, intricate stone architecture, atmospheric perspective, highly
+detailed environment, portrait composition, no frame
+
+ESCENA 2 — SANTUARIO EN EL BOSQUE NEGRO
+dark fantasy landscape, a tiny ruined stone shrine deep in a twisted black pine
+forest, a blood red moon visible through the branches, a narrow stream reflecting
+the moonlight in the foreground, low silver mist between tree trunks, dramatic
+depth and layered silhouettes, cinematic chiaroscuro, detailed ancient trees and
+mossy stones, atmospheric, portrait composition, no frame
+
+ESCENA 3 — PUENTE SOBRE EL ABISMO
+dark fantasy landscape, a colossal broken medieval stone bridge spanning a deep
+mountain abyss, one small distant ruined watchtower at the far end, enormous
+storm clouds moving across a dim violet sky, waterfalls disappearing into the
+darkness below, faint lightning illuminating the cliffs, strong foreground to
+background depth, cinematic scale, detailed gothic ruins, portrait composition,
+no frame
+
+ESCENA 4 — NAUFRAGIO EN EL MAR ENCANTADO
+dark fantasy landscape, a weathered ancient shipwreck lodged between jagged black
+coastal cliffs, a cold silver moon above a turbulent enchanted sea, subtle waves
+and pale sea mist around the wreck, distant ruined lighthouse on a headland, foam
+and wet stones in the foreground, layered cinematic composition, detailed dark
+gothic atmosphere, portrait composition, no frame
+
+PROMPT NEGATIVO COMPARTIDO
+animal, creature, monster, text, letters, logo, watermark, frame, border, low quality,
+blurry, out of focus, oversaturated, cartoon, anime, illustration, duplicate objects,
+duplicate people, crowd, malformed architecture, deformed, bad anatomy, extra limbs,
+extra fingers, malformed hands, close-up face, close-up portrait, bright cheerful
+lighting, modern clothing, modern buildings
