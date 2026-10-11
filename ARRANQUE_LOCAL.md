@@ -10,21 +10,15 @@ Guía para iniciar el proyecto en Windows 10 desde la carpeta del repositorio.
 
 ## Iniciar servicios
 
-1. Abre Ollama. El proyecto espera el servicio en `http://127.0.0.1:11434` y el modelo `gemma3:4b`.
-2. Desde la raíz del proyecto, ejecuta en PowerShell:
+Desde la raíz del proyecto, ejecuta en PowerShell:
 
-   ```powershell
-   .\scripts\start-comfyui.ps1
-   ```
+```powershell
+.\scripts\start-services.ps1
+```
 
-   Espera a que inicie y abre [ComfyUI](http://127.0.0.1:8188). Guarda una imagen PNG en su carpeta `output`.
-3. En otra ventana de PowerShell, ejecuta:
+El script inicia Ollama, ComfyUI y n8n en segundo plano, en ese orden. Si alguno ya responde, lo deja funcionando y no crea otra instancia. Abre [n8n](http://localhost:5678) cuando el script indique que los servicios están listos. La salida se guarda en `logs/`.
 
-   ```powershell
-   .\scripts\start-n8n.ps1
-   ```
-
-   Después abre [n8n](http://localhost:5678). El script configura las variables que permiten `Execute Command` y limitan la lectura de archivos del nodo a `videos`.
+Para depurar o iniciar un servicio por separado, siguen disponibles `scripts/start-comfyui.ps1` y `scripts/start-n8n.ps1`; Ollama también puede iniciarse desde su aplicación local.
 
 ## Publicar un vídeo
 
@@ -41,5 +35,15 @@ Invoke-RestMethod 'http://127.0.0.1:11434/api/tags'
 ```
 
 Si no aparece `Execute Command`, cierra n8n con Ctrl+C y vuelve a iniciarlo con `scripts/start-n8n.ps1`. Si el nodo de archivos indica que no puede acceder a una ruta, confirma que usaste ese script y que `VIDEO_OUTPUT_DIR` apunta a la carpeta local del proyecto.
+
+## Detener servicios
+
+Desde la raíz del proyecto, ejecuta:
+
+```powershell
+.\scripts\stop-services.ps1
+```
+
+El script detiene n8n (puerto 5678), ComfyUI (el puerto configurado en `COMFYUI_URL`) y Ollama (puerto 11434). Antes de detener un proceso comprueba su nombre y línea de comandos; si un programa ajeno ocupa uno de esos puertos, lo deja activo y muestra un aviso. Para dejar Ollama abierto, ejecuta `.\scripts\stop-services.ps1 -KeepOllama`.
 
 Para más detalles consulta [GUIA_COMPLETA.md](GUIA_COMPLETA.md) y [README.md](README.md).

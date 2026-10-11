@@ -17,7 +17,7 @@ ComfyUI, modelos, n8n, Ollama y las credenciales son instalaciones/datos locales
 ```text
 assets/audio/       pista de audio local (ignorada por Git)
 assets/prompts/     prompts de referencia
-scripts/            creación de MP4 y arranque local
+scripts/            creación de MP4 y administración de servicios locales
 videos/             resultados generados (ignorados por Git)
 workflows/          workflow de ejemplo sanitizado para importar en n8n
 .env.example        plantilla de configuración local
@@ -39,29 +39,31 @@ Al clonar el proyecto, copia `.env.example` a `.env`, revisa `COMFYUI_DIR` y añ
 
 ## Arranque
 
-1. Abre Ollama y asegúrate de que el modelo está descargado:
+Desde la raíz del repositorio, inicia los servicios locales juntos:
 
-   ```powershell
-   Invoke-RestMethod http://127.0.0.1:11434/api/tags
-   ```
+```powershell
+.\scripts\start-services.ps1
+```
 
-2. Desde la raíz del repositorio, inicia ComfyUI:
+El lanzador comprueba primero los endpoints locales y solo inicia los que no responden: Ollama (`11434`), ComfyUI (`COMFYUI_URL`) y n8n (`5678`). Espera a que cada uno esté listo antes de continuar. Los procesos se ejecutan en segundo plano y sus registros se guardan en `logs/`. Ollama debe tener descargado `gemma3:4b`; puedes comprobar los modelos con:
 
-   ```powershell
-   .\scripts\start-comfyui.ps1
-   ```
+```powershell
+Invoke-RestMethod http://127.0.0.1:11434/api/tags
+```
 
-   Abre [http://127.0.0.1:8188](http://127.0.0.1:8188) y comprueba que puedes ejecutar el workflow de SD 1.5. El workflow exportado como API está en `workflows/workdlow-dfantasy.json`; n8n lo usa para enviar el prompt dinámico al nodo positivo y recoger el PNG generado.
+Abre [ComfyUI](http://127.0.0.1:8188) para verificar su interfaz y [n8n](http://localhost:5678) para abrir el editor. `scripts/start-comfyui.ps1` y `scripts/start-n8n.ps1` siguen disponibles para iniciar esos componentes individualmente. n8n conserva las variables de entorno necesarias para `Execute Command` y el acceso del nodo de archivos a `VIDEO_OUTPUT_DIR`.
 
-3. En otra ventana de PowerShell inicia n8n:
+Importa `workflows/n8n-video-tiktok.json` en n8n y revisa los marcadores de configuración antes de ejecutar. Los cambios hechos al JSON local no aparecen en una copia del workflow ya abierta en n8n hasta que importes la versión actualizada.
 
-   ```powershell
-   .\scripts\start-n8n.ps1
-   ```
+## Detener servicios
 
-   Abre [http://localhost:5678](http://localhost:5678). El script prepara las variables de entorno de n8n para permitir `Execute Command` y permitir que el nodo de archivos lea `VIDEO_OUTPUT_DIR`.
+Desde la raíz del repositorio ejecuta:
 
-4. Importa `workflows/n8n-video-tiktok.json` en n8n y revisa los marcadores de configuración antes de ejecutar. Los cambios hechos al JSON local no aparecen en una copia del workflow ya abierta en n8n hasta que importes la versión actualizada.
+```powershell
+.\scripts\stop-services.ps1
+```
+
+El script busca los procesos que escuchan en los puertos de n8n (5678), ComfyUI (`COMFYUI_URL`) y Ollama (11434), y comprueba el nombre y la línea de comandos antes de detenerlos. Si el puerto lo ocupa otro programa, no lo detiene. Usa `.\scripts\stop-services.ps1 -KeepOllama` para detener n8n y ComfyUI y dejar Ollama abierto.
 
 `assets/prompts/prompt1.txt` conserva ejemplos para generar imágenes manualmente. En el workflow automático, Ollama propone un prompt y n8n se lo envía a ComfyUI usando `workflows/workdlow-dfantasy.json`. La dirección visual prioriza un paisaje Dark Fantasy amplio: el entorno debe llenar aproximadamente el 85–90 % del encuadre. Se incluye solo un detalle narrativo discreto (un caballero o hechicero pequeño, a media o larga distancia, o un artefacto integrado en el lugar); se evitan retratos y primeros planos. Ollama limita `video_prompt` a menos de 90 palabras y `scene` a menos de 25, y la llamada restringe la respuesta para reducir el riesgo de JSON truncado. Ollama no conserva memoria de ejecuciones anteriores, así que puede proponer una escena parecida ocasionalmente; el seed de ComfyUI sí cambia en cada ejecución.
 
