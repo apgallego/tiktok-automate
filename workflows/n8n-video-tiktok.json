@@ -90,7 +90,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"query\": \"mutation CreatePost { createPost(input: { text: \\\"#darkfantasy #fantasiaoscura #misterio #mistery #fyp\\\", channelId: \\\"6ac576c36a5c39ccb63758bf\\\", schedulingType: automatic, mode: addToQueue, assets: [{ video: { url: \\\"{{ $json.secure_url }}\\\", metadata: { thumbnailOffset: 2000 } } }] }) { ... on PostActionSuccess { post { id text dueAt } } ... on MutationError { message } } }\"\n}",
+        "jsonBody": "={\n  \"query\": \"mutation CreatePost { createPost(input: { text: \\\"#darkfantasy #fyp #nostalgia #fantasy #aesthetic\\\", channelId: \\\"6ac576c36a5c39ccb63758bf\\\", schedulingType: automatic, mode: addToQueue, assets: [{ video: { url: \\\"{{ $json.secure_url }}\\\", metadata: { thumbnailOffset: 2000 } } }] }) { ... on PostActionSuccess { post { id text dueAt } } ... on MutationError { message } } }\"\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",

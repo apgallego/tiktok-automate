@@ -29,7 +29,7 @@ $services = @(
         Url = 'http://127.0.0.1:5678/healthz'
         StartFile = Join-Path $PSScriptRoot 'start-n8n.ps1'
         Arguments = @()
-        Timeout = 90
+        Timeout = $StartupTimeoutSeconds
     }
 )
 
